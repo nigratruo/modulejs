@@ -1,4 +1,3 @@
-
 /*
  *   __   __  _______  ______   __   __  ___      _______      ___  _______
  *  |  |_|  ||       ||      | |  | |  ||   |    |       |    |   ||       |
@@ -10,33 +9,18 @@
  *
  *
  */
-(function (root, factory) {
+export default (function () {
 
-  'use strict';
-
-  var
-    version = '0.0.1'
-    , description = 'Moduler library'
-    , license = 'MIT'
-    ;
-
-  // Load
-  var def = factory({
-    'version': version
-    , 'description': description
-    , 'license': license
-  });
-
-  module.exports = def;
-
-})(this, function ($) {
-
-  'use strict';
+  const def = {
+    namespace: 'MODULE',
+    version: '0.0.1',
+    description: 'Moduler library',
+    license: 'MIT'
+  };
 
   var start = (new Date()).getTime();
 
-  /* Default configurations.
-   */
+  // Default configurations
   var Config = {
     "debug": true,
     "strict": true,
@@ -109,7 +93,7 @@
     if (!arg) return context;
 
     // Module extension.
-    if (is_m(arg)) {
+    if (is_module(arg)) {
       return extend.apply(context, arg.stack.concat(args));
       // Or clone and flatten Module.
       // arg = clone(arg.prototype, {});
@@ -160,7 +144,7 @@
   }
 
   function inherit(d, s, o) {
-    if (is_m(d) && is_m(s) && is_o(o)) {
+    if (is_module(d) && is_module(s) && is_o(o)) {
       (d.stack === undefined) && (d.stack = []);
       (s.stack === undefined) && (s.stack = []);
       d.stack = d.stack.concat(s.stack.concat(o));
@@ -272,17 +256,13 @@
     return (arguments.length > 0 || this === Factory) ? extend.apply(this, arguments) : this;
   }
 
-
-
-
-
   /* error
    * ( String
    * ) -> undefined
    *   !! Expection
    */
   function error(message) {
-    throw $.namespace + ": " + message;
+    throw new Error(def.namespace + ": " + message);
   }
 
   /* error_no_property
@@ -454,7 +434,7 @@
       && (strict ? v.constructor === Array : true);
   }
 
-  function is_m(c) {
+  function is_module(c) {
     return (typeof c === "function" && c.is_Module && c.is_Module === start);
   }
 
@@ -496,4 +476,4 @@
 
   return Factory;
 
-});
+})()
